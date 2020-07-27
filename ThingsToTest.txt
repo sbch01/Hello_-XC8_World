@@ -2,4 +2,6 @@
 Here is some things to test in microchip xc8 compiler
 =====================================================
 
-inline -> page85 
+4.2.3.2 INLINED FUNCTIONS -> page 85
+      {Test how inline function is compiled by compiler}
+4.3.8 Bit Instructions -> page 90
