@@ -8,3 +8,4 @@ Here is some things to test in microchip xc8 compiler
 4.4.4 Floating-Point  Data  Types ->page 96
       {See how float occupy RAM}
 4.4.6.5 SPECIAL POINTER TARGETS ->page 105
+4.4.7.3 CHARACTER AND STRING CONSTANTS ->page 107
