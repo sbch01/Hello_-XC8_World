@@ -10,7 +10,9 @@ Here is some things to test in microchip xc8 compiler
 
 4.4.4 Floating-Point  Data  Types ->page 96
       {See how float occupy RAM}
-      
+            {Very Important link for coding float https://en.wikipedia.org/wiki/Single-precision_floating-point_format
+             This is standart: IEEE 754 single-precision binary floating-point format: binary32}
+             
 4.4.6.5 SPECIAL POINTER TARGETS ->page 105
 
 4.4.7.3 CHARACTER AND STRING CONSTANTS ->page 107
