@@ -4,8 +4,13 @@ Here is some things to test in microchip xc8 compiler
 
 4.2.3.2 INLINED FUNCTIONS -> page 85
       {Test how inline function is compiled by compiler}
+            {XC8 Support inline but not in free version of the compiler!}
+            
 4.3.8 Bit Instructions -> page 90
+
 4.4.4 Floating-Point  Data  Types ->page 96
       {See how float occupy RAM}
+      
 4.4.6.5 SPECIAL POINTER TARGETS ->page 105
+
 4.4.7.3 CHARACTER AND STRING CONSTANTS ->page 107
