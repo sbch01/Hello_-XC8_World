@@ -16,3 +16,5 @@ Here is some things to test in microchip xc8 compiler
 4.4.6.5 SPECIAL POINTER TARGETS ->page 105
 
 4.4.7.3 CHARACTER AND STRING CONSTANTS ->page 107
+
+4.6.1 Integral Promotion ->page120
