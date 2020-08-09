@@ -15,7 +15,7 @@
 #ifndef BCD_STRING_H
 #define	BCD_STRING_H
 
-
+//#include <xc.h>
 
 // Swap nibbles function input: 0x12 -> Output: 0x21
 //=================================================================================
@@ -26,15 +26,16 @@ char SwapByteNibbles(char x)
 
 
 
-//Some custom write by Me "rotate add 3" algorithm for convert Byte to Packed BCD Digit.
-//=================================================================================
- int ByteToBCD (unsigned char Byte){
+//"rotate add 3" algorithm for convert Byte to Packed BCD Digit.
+//==================================================================================
+ unsigned int ByteToBCD (unsigned char Byte){
  
      unsigned int BCD_Result = 0;
      unsigned char index = 0;
      
             for (index = 0;index < 7;index++){
                           
+                //Test from MSB to LSB of Byte if is 1, this 1 is loaded to LSB of BCD_Result
                 if(Byte & (0x80 >> index)){
                     BCD_Result |=  0x0001; //set LSB of BCD_Result as 1
                 }
@@ -42,7 +43,7 @@ char SwapByteNibbles(char x)
                     BCD_Result &= 0xfffe; //set LSB of BCD_Result as 0
                 }
 
-                //Start Check Nibbles and add 3 if nibble is greather then 5
+                //Start Check Nibbles and add 3 if nibble is greater then 5
                 
                     //Check first nibble
                     if ((BCD_Result & 0x000f) > 0x0004){
@@ -72,72 +73,139 @@ char SwapByteNibbles(char x)
                 
             }
             
-            //Check the last bit of Byte and put it to da LSB of BCD_Result
+            //Check the last bit of Byte and put it to the LSB of BCD_Result
             if(Byte & (0x80 >> 7)){
                     BCD_Result |=  0x0001; //set LSB of BCD_Result as 1
             }
      
      return BCD_Result;
  }
+ 
+ 
+ 
+//"rotate add 3" algorithm for convert Word to Packed BCD Digit.
+//==================================================================================
+ __uint24 WordToBCD(unsigned int Word){
+ 
+     __uint24 BCD_Result = 0;
+     unsigned char index = 0;
+      
+        for (index = 0;index < 15;index++){
+            
+            //Test from MSB to LSB of Word if is 1 this, 1 is loaded to LSB of BCD_Result
+            if(Word & (0x8000 >> index)){
+                BCD_Result |=  0x000001; //set LSB of BCD_Result as 1
+            }
+            else{
+                BCD_Result &= 0xfffffe; //set LSB of BCD_Result as 0
+            }
+            
+            //Start Check Nibbles and add 3 if nibble is greater then 5
+                
+                    //Check first nibble
+                    if ((BCD_Result & 0x00000f) > 0x000004){
+
+                        BCD_Result += 0x000003;//add 3 to first nibble
+
+                    }
+
+                    //Check second nibble
+                    if ((BCD_Result & 0x0000f0) > 0x000040){
+
+                        BCD_Result += 0x000030;//add 3 to second nibble
+
+                    }
+
+                    //Check third nibble
+                    if ((BCD_Result & 0x000f00) > 0x000400){
+
+                        BCD_Result += 0x000300;//add 3 to third nibble
+
+                    }
+            
+                    //Check fourth nibble
+                    if ((BCD_Result & 0x00f000) > 0x004000){
+
+                        BCD_Result += 0x003000;//add 3 to fourth nibble
+
+                    }
+            
+                    //Check fifth nibble
+                    if ((BCD_Result & 0x0f0000) > 0x040000){
+
+                        BCD_Result += 0x030000;//add 3 to fifth nibble
+
+                    }
+            
+                //Rotate to left one bit BCD_Result
+                BCD_Result <<= 1;     
+
+        } 
+    
+        //Check the last bit of Word and put it to the LSB of BCD_Result
+        if(Word & (0x8000 >> 7)){
+            BCD_Result |=  0x0001; //set LSB of BCD_Result as 1
+        }
+     
+     return  BCD_Result;
+ }
+ 
 
 /*==============================================================================
  ===============================================================================
  HERE START FUNCTION FROM WEB FORUMS JUST FOR TEST
 ================================================================================  
- ==============================================================================*/
+===============================================================================*/
  
  
-// First int to BCD 1.333 mS   execution time at 16MHz
-//=====================================================
-unsigned long toPackedBcd (unsigned int val)
-{
-  unsigned long bcdresult = 0; char i;
-
-
-  for (i = 0; val; i++)
-  {
-    ((char*)&bcdresult)[i / 2] |= i & 1 ? (val % 10) << 4 : (val % 10) & 0xf;
-    val /= 10;
-  }
-  return bcdresult;
-}
-
-// Second int to BCD 0.856 mS execution time at 16MHz
-//======================================================
-unsigned long toPakedBcd2(unsigned int binaryInput)
-{
-    unsigned long bcdResult = 0;
-    int shift = 0;
-    
-while (binaryInput > 0) {
-      bcdResult |= (binaryInput % 10) << (shift++ << 2);
-      binaryInput /= 10;
-   }
-
-return bcdResult;
-}
-
-//convert 16bit integer to 32bit packed BCD
-//3rd Attempt :)) 0,843 mS execution time at 16MHz
-//===================================================
-
-unsigned long dec2bcd(unsigned int dec) 
-{
-    uint32_t result = 0;
-    int shift = 0;
-
-    while (dec)
-    {
-        result +=  (dec % 10) << shift;
-        dec = dec / 10;
-        shift += 4;
-    }
-    return result;
-}
-
-
-
-
+//// First int to BCD 1.333 mS   execution time at 16MHz
+////=====================================================
+//unsigned long toPackedBcd (unsigned int val)
+//{
+//  unsigned long bcdresult = 0; char i;
+//
+//
+//  for (i = 0; val; i++)
+//  {
+//    ((char*)&bcdresult)[i / 2] |= i & 1 ? (val % 10) << 4 : (val % 10) & 0xf;
+//    val /= 10;
+//  }
+//  return bcdresult;
+//}
+//
+//// Second int to BCD 0.856 mS execution time at 16MHz
+////======================================================
+//unsigned long toPakedBcd2(unsigned int binaryInput)
+//{
+//    unsigned long bcdResult = 0;
+//    int shift = 0;
+//    
+//while (binaryInput > 0) {
+//      bcdResult |= (binaryInput % 10) << (shift++ << 2);
+//      binaryInput /= 10;
+//   }
+//
+//return bcdResult;
+//}
+//
+////convert 16bit integer to 32bit packed BCD
+////3rd Attempt :)) 0,843 mS execution time at 16MHz
+////===================================================
+//
+//unsigned long dec2bcd(unsigned int dec) 
+//{
+//    uint32_t result = 0;
+//    int shift = 0;
+//
+//    while (dec)
+//    {
+//        result +=  (dec % 10) << shift;
+//        dec = dec / 10;
+//        shift += 4;
+//    }
+//    return result;
+//}
+//
 ////------------------------------ string reverse function -----------------------------//
 // 
 // void reverse(char s[])
@@ -151,8 +219,8 @@ unsigned long dec2bcd(unsigned int dec)
 //     s[j] = c;
 //   }
 // }  
-
-
+//
+//
 ////----------------------------- my_itoa_2 function --------------------------------//
 // // returns two digits with a leading zero if required
 // 
@@ -180,3 +248,4 @@ unsigned long dec2bcd(unsigned int dec)
 
 
 #endif	/* XC_HEADER_TEMPLATE_H */
+
